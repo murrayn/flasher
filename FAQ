@@ -1,0 +1,10 @@
+
+1.  It isn't working.  What's wrong?
+
+flasher was designed to indicate file activity via the console LEDs.
+Try switching to the console (Ctrl-Alt-F1 in FreeBSD and Linux) to see
+if the LEDs are flashing there.
+
+If you are using flasher in an X11 environment, see the manual page for
+more information on how to get it to work.
+

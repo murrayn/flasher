@@ -1,0 +1,115 @@
+.\" flasher - Copyright (C) 2002 Murray Nesbitt (websrc@nesbitt.ca)
+.\"
+.\" This program is protected and licensed under the following terms and
+.\" conditions: 1) it may not be redistributed in binary form without the
+.\" explicit permission of the author; 2) when redistributed in source
+.\" form, in whole or in part, this complete copyright statement must
+.\" remain intact.
+.TH FLASHER 1
+.SH NAME
+flasher \-   flash keyboard LEDs to indicate file writes
+.SH SYNOPSIS
+.B flasher
+[
+.B -u seconds
+]
+[
+.B -k /dev/ttyXX
+]
+.B -{c|n|s} file1:file2:...:fileN
+.SH DESCRIPTION
+.I  flasher
+monitors changes to one or more files, and indicates the number of writes
+to these files by briefly flashing a console LED once for each write.
+The flashing sequence is repeated, after a brief pause, until the files
+have been read.  As the files are subsequently read, the number of LED
+flashes is reduced.  When all monitored files have been read, the console
+LED will be disabled.
+.PP
+The most obvious use is to monitor specific system log or mail files.
+.PP
+Multiple LEDs can be used. Each possible LED (-c, -n or -s) takes a list
+of colon-separated file arguments.  For example, when invoked as:
+.PP
+.RS
+# flasher -s /var/log/messages:/var/mail/root
+.RE
+.PP
+the Scroll Lock LED will flash once for each write made to either of these
+files, until the files are read.  When /var/log/messages has been read,
+the Scroll Lock LED will continue to flash once for each write that has
+been made to /var/mail/root, until it also has been read.
+.PP
+The list of files can include files that don't yet exist.
+.PP
+To terminate the daemon, run:
+.PP
+.RS
+# kill `cat /var/run/flasher.pid`
+.RE
+.PP
+.SH X11
+.I flasher
+was designed to use the console to indicate file activity.  When running
+.I flasher
+in an X11 environment, it may be helpful to use the
+.I -k
+option to specify what virtual terminal X11 is running under. For example, use
+.PP
+.RS
+# flasher -k /dev/ttyv3 ...
+.RE
+.PP
+when running X11 on FreeBSD on virtual terminal 4.
+.PP
+Similarly, when using X11 on virtual terminal 8 on Linux, start the daemon
+using:
+.PP
+.RS
+# flasher -k /dev/tty8 ...
+.RE
+.SH OPTIONS
+.TP
+.B \-c
+Indicate writes to the specified file using the Caps Lock LED.
+.TP
+.B \-k /dev/ttyXX
+Use the specified tty (/dev/ttyXX) instead of the console.
+.TP
+.B \-n
+Indicate writes to the specified file using the Num Lock LED.
+.TP
+.B \-s
+Indicate writes to the specified file using the Scroll Lock LED.
+.TP
+.B \-u number
+Scans the specified files for changes every `number' seconds (default: 60).
+.SH EXAMPLES
+The following example will flash the Scroll Lock LED to indicate
+/var/log/messages writes, and the Num Lock LED for writes to
+/var/mail/root:
+.PP
+.RS
+# flasher -s /var/log/messages -n /var/mail/root
+.RE
+.PP
+The following example will flash the Caps Lock LED to indicate writes
+to either /var/log/httpd-error.log or /var/mail/root, and flash the Num
+Lock LED to indicate writes to /var/log/messages.
+.PP
+.RS
+# flasher -n /var/log/messages -c /var/log/httpd-error.log:/var/mail/root
+.RE
+.PP
+.SH FILES
+/var/run/flasher.pid \- flasher lock file
+.SH DIAGNOSTICS
+.I flasher
+must be run as the super-user.
+.PP
+Relative pathnames will be converted to absolute pathnames.
+.PP
+After the program has daemonized, any messages will be sent to syslog.
+.SH AUTHOR
+Murray Nesbitt (websrc@nesbitt.ca)
+

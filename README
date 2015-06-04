@@ -1,0 +1,49 @@
+
+    flasher - Copyright (C) 2002 Murray Nesbitt (websrc@nesbitt.ca)
+
+    This program is protected and licensed under the following terms and
+    conditions: 1) it may not be redistributed in binary form without the
+    explicit permission of the author; 2) when redistributed in source
+    form, in whole or in part, this complete copyright statement must
+    remain intact.
+
+    flasher monitors changes to one or more files, and indicates the
+    number of writes to these files by briefly flashing a console LED
+    once for each write.  The flashing sequence is repeated, after
+    a brief pause, until the files have been read.  As the files are
+    subsequently read, the number of LED flashes is reduced.  When all
+    monitored files have been read, the console LED will be disabled.
+
+    The most obvious use is to monitor specific system log or mail files.
+
+    Multiple LEDs can be used. Each possible LED (-c, -n or -s) takes a
+    list of colon-separated file arguments.  For example, when invoked as:
+
+        # ./flasher -s /var/log/messages:/var/mail/root
+
+    the Scroll Lock LED will flash once for each write made to either
+    of these files, until the files are read.  When /var/log/messages
+    has been read, the Scroll Lock LED will continue to flash once for
+    each write that has been made to /var/mail/root, until it also has
+    been read.
+
+    The list of files can include files that don't yet exist.
+
+    See the manual pages for more information.
+
+    The program was designed without arbitrary limits of any kind (#
+    of files it can handle, etc.).  Some of the behaviour (e.g. flash
+    characteristics) can be modified--see "flasher.h" for details.
+
+    Supported platforms:
+        o FreeBSD
+        o Linux
+        o Solaris
+        o SCO Unix was supported at one time, but is currently untested.
+          Feedback is welcome!
+
+    Support for other operating systems should require only minimal
+    changes to "flasher.h".  One final note: 'gcc' is the assumed compiler
+    on all platforms.
+
+
